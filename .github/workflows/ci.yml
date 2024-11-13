@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+
+env:
+  MIX_ENV: test
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependency cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build
+          key: mix-test-${{ runner.os }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            mix-test-${{ runner.os }}-${{ hashFiles('**/mix.lock') }}
+            mix-test-${{ runner.os }}-
+            mix-test-
+
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27.1.2"
+          elixir-version: "1.17.3"
+
+      - name: Install dependencies
+        run: |
+          mix deps.get
+
+      - name: Run tests
+        run: mix test
+
+  formatter:
+    name: Formatter
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependency cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build
+          key: mix-fmt-${{ runner.os }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            mix-fmt-${{ runner.os }}-${{ hashFiles('**/mix.lock') }}
+            mix-fmt-${{ runner.os }}-
+            mix-fmt-
+
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27.1.2"
+          elixir-version: "1.17.3"
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Run Formatter
+        run: mix format --check-formatted
+
+  linter:
+    name: Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependency cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build
+          key: mix-lint-${{ runner.os }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            mix-lint-${{ runner.os }}-${{ hashFiles('**/mix.lock') }}
+            mix-lint-${{ runner.os }}-
+            mix-lint-
+
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27.1.2"
+          elixir-version: "1.17.3"
+
+      - name: Install dependencies
+        run: |
+          mix deps.get
+          mix deps.compile
+
+      - name: Run Linter
+        run: mix credo
+
+  dialyzer:
+    name: Dialyzer
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependency cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build
+          key: mix-dialyzer-${{ runner.os }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            mix-dialyzer-${{ runner.os }}-${{ hashFiles('**/mix.lock') }}
+            mix-dialyzer-${{ runner.os }}-
+            mix-dialyzer-
+
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: "27.1.2"
+          elixir-version: "1.17.3"
+
+      - name: Install dependencies
+        run: |
+          mix deps.get
+
+      - name: Run dialyzer
+        run: mix dialyzer
