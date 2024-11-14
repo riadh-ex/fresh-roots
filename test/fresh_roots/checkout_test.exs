@@ -6,6 +6,7 @@ defmodule FreshRoots.CheckoutTest do
 
   @green_tea_code "GR1"
   @strawberries_code "SR1"
+  @coffee_code "CF1"
 
   describe "list_products/0" do
     test "returns all products" do
@@ -41,6 +42,18 @@ defmodule FreshRoots.CheckoutTest do
                  %Checkout.CartItem{product: %{code: @green_tea_code}, quantity: 2}
                ]
              } = cart
+    end
+  end
+
+  describe "cart_total/1" do
+    test "returns the total price of the cart" do
+      cart = Checkout.new_cart()
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
+      {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
+      {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
+
+      assert Checkout.cart_total(cart) == 1934
     end
   end
 end
