@@ -6,7 +6,7 @@ defmodule FreshRoots.Checkout do
   import Ecto.Query, warn: false
   alias FreshRoots.Repo
 
-  alias FreshRoots.Checkout.Product
+  alias FreshRoots.Checkout.{Cart, Product}
 
   @doc """
   Returns the list of all products.
@@ -39,4 +39,6 @@ defmodule FreshRoots.Checkout do
 
   """
   def get_product!(id), do: Repo.get!(Product, id)
+
+  def new_cart, do: %Cart{products: []}
 end
