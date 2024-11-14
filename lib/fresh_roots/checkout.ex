@@ -6,7 +6,7 @@ defmodule FreshRoots.Checkout do
   import Ecto.Query, warn: false
   alias FreshRoots.Repo
 
-  alias FreshRoots.Checkout.{Cart, Product}
+  alias FreshRoots.Checkout.{Cart, CartItem, Product}
 
   @doc """
   Returns the list of all products.
@@ -25,20 +25,18 @@ defmodule FreshRoots.Checkout do
   end
 
   @doc """
-  Gets a single product.
-
-  Raises `Ecto.NoResultsError` if the Product does not exist.
-
+  Gets a single product by its code.
   ## Examples
 
-      iex> get_product!(123)
-      %Product{}
+      iex> get_product_by_code("GR1")
+      {:ok, %Product{}}
 
-      iex> get_product!(456)
-      ** (Ecto.NoResultsError)
+
+      iex> get_product_by_code("INVALID")
+      nil
 
   """
-  def get_product!(id), do: Repo.get!(Product, id)
+  def get_product_by_code(code), do: Repo.get_by(Product, code: code)
 
   @doc """
   Returns a new, empty cart.
@@ -50,4 +48,28 @@ defmodule FreshRoots.Checkout do
 
   """
   def new_cart, do: %Cart{items: []}
+
+  def add_to_cart(cart, product_code, quantity \\ 1) do
+    case get_product_by_code(product_code) do
+      nil ->
+        {:error, :not_found}
+
+      product ->
+        case Enum.find_index(cart.items, &(&1.product.code == product_code)) do
+          nil ->
+            item = %CartItem{product: product, quantity: quantity}
+            items = [item | cart.items]
+            cart = %Cart{items: items}
+            {:ok, cart}
+
+          index ->
+            item = cart.items |> Enum.at(index)
+            new_quantity = item.quantity + quantity
+            new_item = %{item | quantity: new_quantity}
+            items = cart.items |> List.replace_at(index, new_item)
+            cart = %Cart{items: items}
+            {:ok, cart}
+        end
+    end
+  end
 end
