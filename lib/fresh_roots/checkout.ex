@@ -49,6 +49,17 @@ defmodule FreshRoots.Checkout do
   """
   def new_cart, do: %Cart{items: []}
 
+  @doc """
+  Adds a product to the cart.
+
+  If the product is not found, it returns `{:error, :not_found}`.
+
+  ## Examples
+
+      iex> cart = new_cart()
+      iex> add_to_cart(cart, "GR1")
+      {:ok, %Cart{items: [%CartItem{product: %Product{}, quantity: 1}]}}
+  """
   def add_to_cart(cart, product_code, quantity \\ 1) do
     case get_product_by_code(product_code) do
       nil ->
@@ -57,18 +68,19 @@ defmodule FreshRoots.Checkout do
       product ->
         case Enum.find_index(cart.items, &(&1.product.code == product_code)) do
           nil ->
-            item = %CartItem{product: product, quantity: quantity}
-            items = [item | cart.items]
-            cart = %Cart{items: items}
-            {:ok, cart}
+            new_item = %CartItem{product: product, quantity: quantity}
+            updated_cart = %Cart{items: [new_item | cart.items]}
+            {:ok, updated_cart}
 
           index ->
-            item = cart.items |> Enum.at(index)
-            new_quantity = item.quantity + quantity
-            new_item = %{item | quantity: new_quantity}
-            items = cart.items |> List.replace_at(index, new_item)
-            cart = %Cart{items: items}
-            {:ok, cart}
+            updated_cart =
+              update_in(
+                cart,
+                [Access.key(:items), Access.at(index), Access.key(:quantity)],
+                &(&1 + quantity)
+              )
+
+            {:ok, updated_cart}
         end
     end
   end
