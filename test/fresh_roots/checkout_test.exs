@@ -65,6 +65,7 @@ defmodule FreshRoots.CheckoutTest do
 
       {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
 
+      # The second green tea should be free
       assert Checkout.cart_total(cart) == 311
 
       {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
@@ -73,7 +74,29 @@ defmodule FreshRoots.CheckoutTest do
 
       {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
 
+      # The fourth green tea should be free
       assert Checkout.cart_total(cart) == 622
+    end
+
+    test "returns the correct price of the cart with the COO discount" do
+      cart = Checkout.new_cart()
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
+
+      assert Checkout.cart_total(cart) == 500
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
+
+      assert Checkout.cart_total(cart) == 1000
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
+
+      # Price should drop to 4.50 per unit after the third strawberry
+      assert Checkout.cart_total(cart) == 1350
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
+
+      assert Checkout.cart_total(cart) == 1800
     end
   end
 end
