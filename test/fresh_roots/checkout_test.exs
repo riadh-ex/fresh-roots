@@ -98,5 +98,26 @@ defmodule FreshRoots.CheckoutTest do
 
       assert Checkout.cart_total(cart) == 1800
     end
+
+    test "returns the correct price of the cart with the CTO discount - Fractional discount" do
+      cart = Checkout.new_cart()
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
+
+      assert Checkout.cart_total(cart) == 1123
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
+
+      assert Checkout.cart_total(cart) == 2246
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
+
+      # Price should drop to 2/3 of the original price after the third coffee
+      assert Checkout.cart_total(cart) == 2246
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
+
+      assert Checkout.cart_total(cart) == 2995
+    end
   end
 end
