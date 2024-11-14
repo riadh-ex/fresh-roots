@@ -86,6 +86,24 @@ defmodule FreshRoots.Checkout do
   end
 
   def cart_total(%Cart{items: items}) do
-    Stream.map(items, &(&1.product.price_unit_amount * &1.quantity)) |> Enum.sum()
+    total_without_discount =
+      Stream.map(items, &(&1.product.price_unit_amount * &1.quantity))
+      |> Enum.sum()
+
+    total_without_discount - calculate_discount(items)
+  end
+
+  defp calculate_discount(cart_items) do
+    calculate_second_item_for_free_discount(cart_items, "GR1")
+  end
+
+  defp calculate_second_item_for_free_discount(cart_items, product_code) do
+    case Enum.find(cart_items, &(&1.product.code == product_code)) do
+      %CartItem{product: product, quantity: quantity} when quantity >= 2 ->
+        div(quantity, 2) * product.price_unit_amount
+
+      _ ->
+        0
+    end
   end
 end
