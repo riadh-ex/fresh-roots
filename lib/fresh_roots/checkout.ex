@@ -94,13 +94,33 @@ defmodule FreshRoots.Checkout do
   end
 
   defp calculate_discount(cart_items) do
-    calculate_second_item_for_free_discount(cart_items, "GR1")
+    discounts = [
+      calculate_second_item_for_free_discount(cart_items, "GR1"),
+      calculate_price_drop_on_multiple_items_discount(cart_items, "SR1", 450, 3)
+    ]
+
+    Enum.sum(discounts)
   end
 
   defp calculate_second_item_for_free_discount(cart_items, product_code) do
     case Enum.find(cart_items, &(&1.product.code == product_code)) do
       %CartItem{product: product, quantity: quantity} when quantity >= 2 ->
         div(quantity, 2) * product.price_unit_amount
+
+      _ ->
+        0
+    end
+  end
+
+  defp calculate_price_drop_on_multiple_items_discount(
+         cart_items,
+         product_code,
+         new_price,
+         price_drop_quantity
+       ) do
+    case Enum.find(cart_items, &(&1.product.code == product_code)) do
+      %CartItem{product: product, quantity: quantity} when quantity >= price_drop_quantity ->
+        quantity * (product.price_unit_amount - new_price)
 
       _ ->
         0
