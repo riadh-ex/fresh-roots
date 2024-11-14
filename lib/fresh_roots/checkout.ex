@@ -40,5 +40,14 @@ defmodule FreshRoots.Checkout do
   """
   def get_product!(id), do: Repo.get!(Product, id)
 
-  def new_cart, do: %Cart{products: []}
+  @doc """
+  Returns a new, empty cart.
+
+  ## Examples
+
+      iex> new_cart()
+      %Cart{products: []}
+
+  """
+  def new_cart, do: %Cart{items: []}
 end
