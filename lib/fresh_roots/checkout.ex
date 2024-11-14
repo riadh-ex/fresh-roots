@@ -84,4 +84,8 @@ defmodule FreshRoots.Checkout do
         end
     end
   end
+
+  def cart_total(%Cart{items: items}) do
+    Stream.map(items, &(&1.product.price_unit_amount * &1.quantity)) |> Enum.sum()
+  end
 end
