@@ -55,5 +55,25 @@ defmodule FreshRoots.CheckoutTest do
 
       assert Checkout.cart_total(cart) == 1934
     end
+
+    test "returns the correct price of the cart with the CEO discount" do
+      cart = Checkout.new_cart()
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
+
+      assert Checkout.cart_total(cart) == 311
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
+
+      assert Checkout.cart_total(cart) == 311
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
+
+      assert Checkout.cart_total(cart) == 622
+
+      {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
+
+      assert Checkout.cart_total(cart) == 622
+    end
   end
 end
