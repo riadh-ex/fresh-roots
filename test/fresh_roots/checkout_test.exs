@@ -120,4 +120,39 @@ defmodule FreshRoots.CheckoutTest do
       assert Checkout.cart_total(cart) == 2995
     end
   end
+
+  describe "validation tests for the provided test data" do
+    @test_data [
+      %{
+        items: ["GR1", "SR1", "GR1", "GR1", "CF1"],
+        expected_total: 2245
+      },
+      %{
+        items: ["GR1", "GR1"],
+        expected_total: 311
+      },
+      %{
+        items: ["SR1", "SR1", "GR1", "SR1"],
+        expected_total: 1661
+      },
+      %{
+        items: ["GR1", "CF1", "SR1", "CF1", "CF1"],
+        expected_total: 3057
+      }
+    ]
+
+    Enum.each(@test_data, fn %{items: items, expected_total: expected_total} ->
+      test "returns correct total for test data #{inspect(items)}, expecting: #{expected_total}" do
+        cart = Checkout.new_cart()
+
+        cart =
+          Enum.reduce(unquote(items), cart, fn item, acc ->
+            {:ok, acc} = Checkout.add_to_cart(acc, item)
+            acc
+          end)
+
+        assert Checkout.cart_total(cart) == unquote(expected_total)
+      end
+    end)
+  end
 end
