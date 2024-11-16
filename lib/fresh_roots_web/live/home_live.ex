@@ -6,6 +6,8 @@ defmodule FreshRootsWeb.HomeLive do
 
   @impl true
   def render(assigns) do
+    cart_totals = Checkout.cart_total(assigns.cart)
+
     ~H"""
     <div class="container mx-auto px-4 py-8">
       <h1 class="text-3xl font-bold mb-6">
@@ -32,15 +34,15 @@ defmodule FreshRootsWeb.HomeLive do
         <div class="mt-4 pt-4 border-t">
           <div class="flex justify-between items-center">
             <span><%= gettext("Subtotal") %>:</span>
-            <span>£<%= pence_to_pounds_format(Checkout.cart_total(@cart).subtotal) %></span>
+            <span>£<%= pence_to_pounds_format(cart_totals.subtotal) %></span>
           </div>
           <div class="flex justify-between items-center text-red-500">
             <span><%= gettext("Discount") %>:</span>
-            <span>-£<%= pence_to_pounds_format(Checkout.cart_total(@cart).discount) %></span>
+            <span>-£<%= pence_to_pounds_format(cart_totals.discount) %></span>
           </div>
           <div class="flex justify-between items-center font-bold border-t mt-2 pt-2">
             <span><%= gettext("Total") %>:</span>
-            <span>£<%= pence_to_pounds_format(Checkout.cart_total(@cart).total) %></span>
+            <span>£<%= pence_to_pounds_format(cart_totals.total) %></span>
           </div>
         </div>
         <button
