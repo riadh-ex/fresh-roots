@@ -10,6 +10,7 @@ defmodule FreshRoots.Product do
           code: String.t(),
           name: String.t(),
           price_unit_amount: integer(),
+          image_path: String.t(),
           inserted_at: DateTime.t(),
           updated_at: DateTime.t()
         }
@@ -17,6 +18,7 @@ defmodule FreshRoots.Product do
   schema "products" do
     field :code, :string
     field :name, :string
+    field :image_path, :string
 
     # This field represents the price of a single unit of the product in pence.
     # It's sufficient for proper calculations and avoiding floating-point errors,
