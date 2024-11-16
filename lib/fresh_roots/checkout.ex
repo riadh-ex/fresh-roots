@@ -14,11 +14,11 @@ defmodule FreshRoots.Checkout do
 
   ## Examples
 
-      iex> list_products()
-      [%Product{}, ...]
+    iex> list_products()
+    [%Product{}]
 
   """
-
+  @spec list_products() :: [Product.t()]
   def list_products do
     # If this was a larger app it might be better to move this to a separate `Catalog`
     # context to keep the Checkout context focused on the checkout process.
@@ -29,14 +29,15 @@ defmodule FreshRoots.Checkout do
   Gets a single product by its code.
   ## Examples
 
-      iex> get_product_by_code("GR1")
-      {:ok, %Product{}}
+    iex> get_product_by_code("GR1")
+    %Product{}
 
 
-      iex> get_product_by_code("INVALID")
-      nil
+    iex> get_product_by_code("INVALID")
+    nil
 
   """
+  @spec get_product_by_code(String.t()) :: Product.t() | nil
   def get_product_by_code(code), do: Repo.get_by(Product, code: code)
 
   @doc """
@@ -44,10 +45,11 @@ defmodule FreshRoots.Checkout do
 
   ## Examples
 
-      iex> new_cart()
-      %Cart{products: []}
+    iex> new_cart()
+    %Cart{items: []}
 
   """
+  @spec new_cart() :: Cart.t()
   def new_cart, do: %Cart{items: []}
 
   @doc """
@@ -55,12 +57,18 @@ defmodule FreshRoots.Checkout do
 
   If the product is not found, it returns `{:error, :not_found}`.
 
+  ## Parameters
+  - `cart` - the cart to which the product will be added
+  - `product_code` - the code of the product to add
+  - `quantity` - the quantity of the product to add, defaults to 1
+
   ## Examples
 
-      iex> cart = new_cart()
-      iex> add_to_cart(cart, "GR1")
-      {:ok, %Cart{items: [%CartItem{product: %Product{}, quantity: 1}]}}
+    iex> cart = new_cart()
+    iex> add_to_cart(cart, "GR1")
+    {:ok, %Cart{items: [%CartItem{product: %Product{}, quantity: 1}]}}
   """
+  @spec add_to_cart(Cart.t(), String.t(), integer()) :: {:ok, Cart.t()} | {:error, :not_found}
   def add_to_cart(cart, product_code, quantity \\ 1) do
     case get_product_by_code(product_code) do
       nil ->
