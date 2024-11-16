@@ -5,10 +5,7 @@ defmodule FreshRootsWeb.Components do
 
   use FreshRootsWeb, :component
 
-  defp pence_to_pounds_format(pence) do
-    pounds = Decimal.div(pence, 100)
-    Decimal.to_string(pounds)
-  end
+  import FreshRootsWeb.Components.Helpers
 
   def product(assigns) do
     ~H"""
@@ -20,7 +17,11 @@ defmodule FreshRootsWeb.Components do
           <span class="text-lg font-bold">
             £<%= pence_to_pounds_format(@product.price_unit_amount) %>
           </span>
-          <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+          <button
+            phx-click="add_to_cart"
+            phx-value-id={@product.code}
+            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          >
             <%= gettext("Add to Cart") %>
           </button>
         </div>
