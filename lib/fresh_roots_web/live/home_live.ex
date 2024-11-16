@@ -30,8 +30,16 @@ defmodule FreshRootsWeb.HomeLive do
           <% end %>
         </div>
         <div class="mt-4 pt-4 border-t">
-          <div class="flex justify-between items-center font-bold">
-            <span>Total:</span>
+          <div class="flex justify-between items-center">
+            <span><%= gettext("Subtotal") %>:</span>
+            <span>£<%= pence_to_pounds_format(Checkout.cart_total(@cart).subtotal) %></span>
+          </div>
+          <div class="flex justify-between items-center text-red-500">
+            <span><%= gettext("Discount") %>:</span>
+            <span>-£<%= pence_to_pounds_format(Checkout.cart_total(@cart).discount) %></span>
+          </div>
+          <div class="flex justify-between items-center font-bold border-t mt-2 pt-2">
+            <span><%= gettext("Total") %>:</span>
             <span>£<%= pence_to_pounds_format(Checkout.cart_total(@cart).total) %></span>
           </div>
         </div>
