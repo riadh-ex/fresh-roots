@@ -1,4 +1,4 @@
-defmodule FreshRoots.Checkout.Product do
+defmodule FreshRoots.Product do
   @moduledoc """
   Represents a product in our little supermarket.
   """

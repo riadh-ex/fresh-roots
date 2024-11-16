@@ -1,7 +1,7 @@
 defmodule FreshRoots.Repo.Migrations.SeedProducts do
   use Ecto.Migration
 
-  alias FreshRoots.Checkout.Product
+  alias FreshRoots.Product
   alias FreshRoots.Repo
 
   import Ecto.Query, warn: false

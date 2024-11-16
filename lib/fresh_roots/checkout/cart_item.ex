@@ -5,6 +5,6 @@ defmodule FreshRoots.Checkout.CartItem do
 
   use Ecto.Schema
 
-  @type t :: %__MODULE__{product: FreshRoots.Checkout.Product.t(), quantity: integer()}
+  @type t :: %__MODULE__{product: FreshRoots.Product.t(), quantity: integer()}
   defstruct [:product, :quantity]
 end
