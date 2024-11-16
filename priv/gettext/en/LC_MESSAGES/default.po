@@ -1,0 +1,98 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/fresh_roots_web/components/core_components.ex:482
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/fresh_roots_web/components/components.ex:25
+#, elixir-autogen, elixir-format
+msgid "Add to Cart"
+msgstr ""
+
+#: lib/fresh_roots_web/components/core_components.ex:160
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/fresh_roots_web/live/home_live.ex:85
+#, elixir-autogen, elixir-format
+msgid "Cart is empty!"
+msgstr ""
+
+#: lib/fresh_roots_web/live/home_live.ex:50
+#, elixir-autogen, elixir-format
+msgid "Checkout"
+msgstr ""
+
+#: lib/fresh_roots_web/live/home_live.ex:91
+#, elixir-autogen, elixir-format
+msgid "Checkout successful! Do come back soon when payment is implemented!"
+msgstr ""
+
+#: lib/fresh_roots_web/live/home_live.ex:56
+#, elixir-autogen, elixir-format
+msgid "Clear"
+msgstr ""
+
+#: lib/fresh_roots_web/live/home_live.ex:38
+#, elixir-autogen, elixir-format
+msgid "Discount"
+msgstr ""
+
+#: lib/fresh_roots_web/components/core_components.ex:151
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr ""
+
+#: lib/fresh_roots_web/components/core_components.ex:172
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr ""
+
+#: lib/fresh_roots_web/components/core_components.ex:167
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/fresh_roots_web/live/home_live.ex:34
+#, elixir-autogen, elixir-format
+msgid "Subtotal"
+msgstr ""
+
+#: lib/fresh_roots_web/components/core_components.ex:150
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr ""
+
+#: lib/fresh_roots_web/live/home_live.ex:42
+#, elixir-autogen, elixir-format
+msgid "Total"
+msgstr ""
+
+#: lib/fresh_roots_web/components/core_components.ex:155
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/fresh_roots_web/live/home_live.ex:12
+#, elixir-autogen, elixir-format
+msgid "Welcome to Fresh Roots"
+msgstr ""
+
+#: lib/fresh_roots_web/components/core_components.ex:76
+#: lib/fresh_roots_web/components/core_components.ex:130
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""
