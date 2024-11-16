@@ -47,7 +47,7 @@ defmodule FreshRoots.CheckoutTest do
       {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
       {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
 
-      assert Checkout.cart_total(cart) == 1934
+      assert %{total: 1934} = Checkout.cart_total(cart)
     end
 
     test "returns the correct price of the cart with the CEO discount - Buy one get one free discount" do
@@ -55,21 +55,21 @@ defmodule FreshRoots.CheckoutTest do
 
       {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
 
-      assert Checkout.cart_total(cart) == 311
+      assert %{total: 311} = Checkout.cart_total(cart)
 
       {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
 
       # The second green tea should be free
-      assert Checkout.cart_total(cart) == 311
+      assert %{total: 311} = Checkout.cart_total(cart)
 
       {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
 
-      assert Checkout.cart_total(cart) == 622
+      assert %{total: 622} = Checkout.cart_total(cart)
 
       {:ok, cart} = Checkout.add_to_cart(cart, @green_tea_code)
 
       # The fourth green tea should be free
-      assert Checkout.cart_total(cart) == 622
+      assert %{total: 622} = Checkout.cart_total(cart)
     end
 
     test "returns the correct price of the cart with the COO discount - Bulk price drop discount" do
@@ -77,20 +77,20 @@ defmodule FreshRoots.CheckoutTest do
 
       {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
 
-      assert Checkout.cart_total(cart) == 500
+      assert %{total: 500} = Checkout.cart_total(cart)
 
       {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
 
-      assert Checkout.cart_total(cart) == 1000
+      assert %{total: 1000} = Checkout.cart_total(cart)
 
       {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
 
       # Price should drop to 4.50 per unit after the third strawberry
-      assert Checkout.cart_total(cart) == 1350
+      assert %{total: 1350} = Checkout.cart_total(cart)
 
       {:ok, cart} = Checkout.add_to_cart(cart, @strawberries_code)
 
-      assert Checkout.cart_total(cart) == 1800
+      assert %{total: 1800} = Checkout.cart_total(cart)
     end
 
     test "returns the correct price of the cart with the CTO discount - Fractional discount" do
@@ -98,20 +98,20 @@ defmodule FreshRoots.CheckoutTest do
 
       {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
 
-      assert Checkout.cart_total(cart) == 1123
+      assert %{total: 1123} = Checkout.cart_total(cart)
 
       {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
 
-      assert Checkout.cart_total(cart) == 2246
+      assert %{total: 2246} = Checkout.cart_total(cart)
 
       {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
 
       # Price should drop to 2/3 of the original price after the third coffee
-      assert Checkout.cart_total(cart) == 2246
+      assert %{total: 2246} = Checkout.cart_total(cart)
 
       {:ok, cart} = Checkout.add_to_cart(cart, @coffee_code)
 
-      assert Checkout.cart_total(cart) == 2995
+      assert %{total: 2995} = Checkout.cart_total(cart)
     end
   end
 
@@ -145,7 +145,7 @@ defmodule FreshRoots.CheckoutTest do
             acc
           end)
 
-        assert Checkout.cart_total(cart) == unquote(expected_total)
+        assert %{total: unquote(expected_total)} = Checkout.cart_total(cart)
       end
     end)
   end

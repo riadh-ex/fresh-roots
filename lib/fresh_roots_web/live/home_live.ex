@@ -32,7 +32,7 @@ defmodule FreshRootsWeb.HomeLive do
         <div class="mt-4 pt-4 border-t">
           <div class="flex justify-between items-center font-bold">
             <span>Total:</span>
-            <span>£<%= pence_to_pounds_format(Checkout.cart_total(@cart)) %></span>
+            <span>£<%= pence_to_pounds_format(Checkout.cart_total(@cart).total) %></span>
           </div>
         </div>
         <button

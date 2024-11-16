@@ -69,11 +69,18 @@ defmodule FreshRoots.Checkout do
     Discount.fractional_discount("CF1", 3, 3)
   ]
 
+  @spec cart_total(Cart.t()) :: %{total: integer(), subtotal: integer(), discount: integer()}
   def cart_total(%Cart{items: items}) do
     total_without_discount =
       Stream.map(items, &(&1.product.price_unit_amount * &1.quantity))
       |> Enum.sum()
 
-    total_without_discount - Discount.total_discount(items, @discount_rules)
+    total_discount = Discount.total_discount(items, @discount_rules)
+
+    %{
+      total: total_without_discount - total_discount,
+      subtotal: total_without_discount,
+      discount: total_discount
+    }
   end
 end
