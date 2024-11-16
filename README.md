@@ -1,5 +1,7 @@
 # FreshRoots
 
+**A demo is available at: https://fresh-roots.fly.dev/**
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
