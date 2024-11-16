@@ -6,7 +6,7 @@ defmodule FreshRoots.Checkout do
   import Ecto.Query, warn: false
   alias FreshRoots.Repo
 
-  alias FreshRoots.Checkout.{Cart, CartItem}
+  alias FreshRoots.Checkout.{Cart, CartItem, Discount}
   alias FreshRoots.Product
 
   @doc """
@@ -86,60 +86,20 @@ defmodule FreshRoots.Checkout do
     end
   end
 
+  # The purpose of making discounts declarative is to make it easier to change
+  # the rules in the future, persist them in the database, or even apply custom
+  # discounts for specific customers.
+  @discount_rules [
+    Discount.buy_one_get_one_free("GR1"),
+    Discount.bulk_purchase_price_drop("SR1", 450, 3),
+    Discount.fractional_discount("CF1", 3, 3)
+  ]
+
   def cart_total(%Cart{items: items}) do
     total_without_discount =
       Stream.map(items, &(&1.product.price_unit_amount * &1.quantity))
       |> Enum.sum()
 
-    total_without_discount - calculate_discount(items)
-  end
-
-  defp calculate_discount(cart_items) do
-    discounts = [
-      calculate_second_item_for_free_discount(cart_items, "GR1"),
-      calculate_price_drop_on_multiple_items_discount(cart_items, "SR1", 450, 3),
-      calculate_fractional_discount_on_multiple_items(cart_items, "CF1", 3)
-    ]
-
-    Enum.sum(discounts)
-  end
-
-  defp calculate_second_item_for_free_discount(cart_items, product_code) do
-    case Enum.find(cart_items, &(&1.product.code == product_code)) do
-      %CartItem{product: product, quantity: quantity} when quantity >= 2 ->
-        div(quantity, 2) * product.price_unit_amount
-
-      _ ->
-        0
-    end
-  end
-
-  defp calculate_price_drop_on_multiple_items_discount(
-         cart_items,
-         product_code,
-         new_price,
-         price_drop_quantity
-       ) do
-    case Enum.find(cart_items, &(&1.product.code == product_code)) do
-      %CartItem{product: product, quantity: quantity} when quantity >= price_drop_quantity ->
-        quantity * (product.price_unit_amount - new_price)
-
-      _ ->
-        0
-    end
-  end
-
-  defp calculate_fractional_discount_on_multiple_items(
-         cart_items,
-         product_code,
-         price_drop_quantity
-       ) do
-    case Enum.find(cart_items, &(&1.product.code == product_code)) do
-      %CartItem{product: product, quantity: quantity} when quantity >= price_drop_quantity ->
-        div(quantity * product.price_unit_amount, 3)
-
-      _ ->
-        0
-    end
+    total_without_discount - Discount.total_discount(items, @discount_rules)
   end
 end
