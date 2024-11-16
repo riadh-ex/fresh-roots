@@ -3,42 +3,8 @@ defmodule FreshRoots.Checkout do
   The Checkout context.
   """
 
-  import Ecto.Query, warn: false
-  alias FreshRoots.Repo
-
   alias FreshRoots.Checkout.{Cart, CartItem, Discount}
-  alias FreshRoots.Product
-
-  @doc """
-  Returns the list of all products.
-
-  ## Examples
-
-    iex> list_products()
-    [%Product{}]
-
-  """
-  @spec list_products() :: [Product.t()]
-  def list_products do
-    # If this was a larger app it might be better to move this to a separate `Catalog`
-    # context to keep the Checkout context focused on the checkout process.
-    Repo.all(Product)
-  end
-
-  @doc """
-  Gets a single product by its code.
-  ## Examples
-
-    iex> get_product_by_code("GR1")
-    %Product{}
-
-
-    iex> get_product_by_code("INVALID")
-    nil
-
-  """
-  @spec get_product_by_code(String.t()) :: Product.t() | nil
-  def get_product_by_code(code), do: Repo.get_by(Product, code: code)
+  alias FreshRoots.Catalog
 
   @doc """
   Returns a new, empty cart.
@@ -70,7 +36,7 @@ defmodule FreshRoots.Checkout do
   """
   @spec add_to_cart(Cart.t(), String.t(), integer()) :: {:ok, Cart.t()} | {:error, :not_found}
   def add_to_cart(cart, product_code, quantity \\ 1) do
-    case get_product_by_code(product_code) do
+    case Catalog.get_product_by_code(product_code) do
       nil ->
         {:error, :not_found}
 
